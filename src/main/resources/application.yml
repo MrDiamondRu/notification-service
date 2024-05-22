@@ -1,0 +1,51 @@
+spring:
+  application:
+    name: notification-service
+  jpa:
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: UTC
+    generate-ddl: false
+    hibernate:
+      ddl-auto: validate
+  datasource:
+    url: jdbc:postgresql://postgres:5432/notification-service-db
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+  liquibase:
+    change-log: classpath:/db/migration/changelog.xml
+  servlet:
+    multipart:
+      enabled: true
+      location: ${java.io.tmpdir}
+  security:
+    oauth2:
+      client:
+        provider:
+          keycloak:
+            issuer-uri: http://192.168.100.100:8484/auth/realms/Jupiter
+            user-name-attribute: preferred_username
+        registration:
+          keycloak:
+            client-id: notification-service
+            authorization-grant-type: authorization_code
+            scope: openid
+      resourceserver:
+        jwt:
+          issuer-uri: http://192.168.100.100:8484/auth/realms/Jupiter
+
+server:
+  port: 8051
+  error:
+    whitelabel:
+      enabled: false
+
+# ????????? ?????? ??????????
+settings:
+  # ?????????? ?????????, ???????????? ?? ????? ????????
+  page-size: 10
+  # ip ????? ??????? ???????? ?????????
+  api-address: http://smsgateway:8050
+
